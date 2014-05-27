@@ -8,44 +8,45 @@
 	<meta name="viewport" content="width=device-width">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
-	function UndoRedoMemento (update) {
+	// http://en.wikipedia.org/wiki/Memento_pattern
+	function UndoRedoMemento (input) {
 		var undo = [];
 		var redo = [];
-		var value = null;
-		update = update || $.noop;
+		var value = '';
 		this.undo = function () {
 			if (undo.length) {
 				value = undo.pop();
-				redo.push(input.val());
-				update(value);
+				redo.push(input());
+				input(value);
 				return value;
 			}
 		};
 		this.redo = function () {
 			if (redo.length) {
 				value = redo.pop();
-				undo.push(input.val());
-				update(value);
+				undo.push(input());
+				input(value);
 				return value;
 			}
 		};
-		this.memento = function (_value) {
-			// only add redo if value is different
-			// to prevent filling the buffer with
-			// false undo entries
-			if (value !== _value) {
-				undo.push(_value);
+		this.memento = function () {
+			var newValue = input();
+			if (value !== newValue) {
+				undo.push(value);
 				redo.length = 0;
+				value = newValue;
 			}
 		};
 	}
 
 	var undoRedoMemento;
 
-	$(document).ready(function () {
-		undoRedoMemento = new UndoRedoMemento(function (value) {
-			$('#undoredoinput').val(value);
-		});
+	undoRedoMemento = new UndoRedoMemento(function (value) {
+		// function for getting/setting memento value
+		if (typeof value !== 'undefined') {
+			$('#example1').val(value);
+		}
+		return $('#example1').val();
 	});
 
 	function undo() {
@@ -58,17 +59,17 @@
 		return false;
 	}
 
-	function memento(value) {
-		undoRedoMemento.memento(value)
+	function memento() {
+		undoRedoMemento.memento()
 	}
 
 	</script>
 </head>
 <body>
 
-	<a href="#undo" onclick="undo()">undo</a>
-	<a href="#redo" onclick="redo()">redo</a>
-	<input id="undoredoinput" onkeydown="memento(this.value)" />
+	<a href="#undo" onclick="return undo();">undo</a>
+	<a href="#redo" onclick="return redo();">redo</a>
+	<input id="example1" onkeyup="memento()" />
 
 </body>
 </html>
