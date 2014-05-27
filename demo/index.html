@@ -39,9 +39,9 @@
 		};
 	}
 
-	var undoRedoMemento;
+	var example1Memento;
 
-	undoRedoMemento = new UndoRedoMemento(function (value) {
+	example1Memento = new UndoRedoMemento(function (value) {
 		// function for getting/setting memento value
 		if (typeof value !== 'undefined') {
 			$('#example1').val(value);
@@ -50,17 +50,17 @@
 	});
 
 	function undo() {
-		undoRedoMemento.undo();
+		example1Memento.undo();
 		return false;
 	}
 
 	function redo() {
-		undoRedoMemento.redo();
+		example1Memento.redo();
 		return false;
 	}
 
 	function memento() {
-		undoRedoMemento.memento()
+		example1Memento.memento()
 	}
 
 	</script>
