@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>OV Interactive Answer Types (IAT)</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script>
+	function UndoRedoMemento (update) {
+		var undo = [];
+		var redo = [];
+		var value = null;
+		update = update || $.noop;
+		this.undo = function () {
+			if (undo.length) {
+				value = undo.pop();
+				redo.push(input.val());
+				update(value);
+				return value;
+			}
+		};
+		this.redo = function () {
+			if (redo.length) {
+				value = redo.pop();
+				undo.push(input.val());
+				update(value);
+				return value;
+			}
+		};
+		this.memento = function (_value) {
+			// only add redo if value is different
+			// to prevent filling the buffer with
+			// false undo entries
+			if (value !== _value) {
+				undo.push(_value);
+				redo.length = 0;
+			}
+		};
+	}
+
+	var undoRedoMemento;
+
+	$(document).ready(function () {
+		undoRedoMemento = new UndoRedoMemento(function (value) {
+			$('#undoredoinput').val(value);
+		});
+	});
+
+	function undo() {
+		undoRedoMemento.undo();
+		return false;
+	}
+
+	function redo() {
+		undoRedoMemento.redo();
+		return false;
+	}
+
+	function memento(value) {
+		undoRedoMemento.memento(value)
+	}
+
+	</script>
+</head>
+<body>
+
+	<a href="#undo" onclick="undo()">undo</a>
+	<a href="#redo" onclick="redo()">redo</a>
+	<input id="undoredoinput" onkeydown="memento(this.value)" />
+
+</body>
+</html>
