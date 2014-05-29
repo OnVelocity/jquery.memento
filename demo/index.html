@@ -51,5 +51,22 @@
 
 	<hr>
 
+	<button onclick="$('#example6').memento('undo')">undo</button>
+	<button href="#redo" onclick="$('#example6').memento('redo')">redo</button>
+	<div id="example6" contenteditable="true" style="border: 1px solid silver; width: 100px;"></div>
+	<script>
+		$('#example6').memento({
+			val: function (value) {
+				if (typeof value === 'undefined') {
+					return $(this).html();
+				}
+				$(this).html(value);
+				return value;
+			}
+		});
+	</script>
+
+	<hr>
+
 </body>
 </html>

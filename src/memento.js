@@ -15,7 +15,7 @@
 		init: function (element, onupdate) {/*
 			Bind the update listener to the element*/
 			var evt;
-			evt = element.tagName === 'SELECT' ? 'change' : 'keyup';
+			evt = element.tagName === 'SELECT' ? 'change' : 'input';
 			$(element).on(evt, onupdate);
 		}
 	};
