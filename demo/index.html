@@ -3,73 +3,53 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>OV Interactive Answer Types (IAT)</title>
+	<title>Memento Pattern: Undo/Redo Manager</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script>
-	// http://en.wikipedia.org/wiki/Memento_pattern
-	function UndoRedoMemento (input) {
-		var undo = [];
-		var redo = [];
-		var value = '';
-		this.undo = function () {
-			if (undo.length) {
-				value = undo.pop();
-				redo.push(input());
-				input(value);
-				return value;
-			}
-		};
-		this.redo = function () {
-			if (redo.length) {
-				value = redo.pop();
-				undo.push(input());
-				input(value);
-				return value;
-			}
-		};
-		this.memento = function () {
-			var newValue = input();
-			if (value !== newValue) {
-				undo.push(value);
-				redo.length = 0;
-				value = newValue;
-			}
-		};
-	}
-
-	var example1Memento;
-
-	example1Memento = new UndoRedoMemento(function (value) {
-		// function for getting/setting memento value
-		if (typeof value !== 'undefined') {
-			$('#example1').val(value);
-		}
-		return $('#example1').val();
-	});
-
-	function undo() {
-		example1Memento.undo();
-		return false;
-	}
-
-	function redo() {
-		example1Memento.redo();
-		return false;
-	}
-
-	function memento() {
-		example1Memento.memento()
-	}
-
-	</script>
+	<script src="../src/memento.js"></script>
 </head>
 <body>
 
-	<a href="#undo" onclick="return undo();">undo</a>
-	<a href="#redo" onclick="return redo();">redo</a>
-	<input id="example1" onkeyup="memento()" />
+	<button onclick="$('#example2').memento('undo')">undo</button>
+	<button href="#redo" onclick="$('#example2').memento('redo')">redo</button>
+	<input id="example2"/>
+	<script>
+		$('#example2').memento();
+	</script>
+
+	<hr>
+
+	<button onclick="$('#example3').memento('undo')">undo</button>
+	<button href="#redo" onclick="$('#example3').memento('redo')">redo</button>
+	<input id="example3"/>
+	<script>
+		$('#example3').memento();
+	</script>
+
+	<hr>
+
+	<button onclick="$('#example5').memento('undo')">undo</button>
+	<button href="#redo" onclick="$('#example5').memento('redo')">redo</button>
+	<textarea id="example5"></textarea>
+	<script>
+		$('#example5').memento();
+	</script>
+
+	<hr>
+
+	<button onclick="$('#example4').memento('undo')">undo</button>
+	<button href="#redo" onclick="$('#example4').memento('redo')">redo</button>
+	<select id="example4">
+		<option selected="selected">One</option>
+		<option>Two</option>
+		<option>Three</option>
+	</select>
+	<script>
+		$('#example4').memento();
+	</script>
+
+	<hr>
 
 </body>
 </html>
